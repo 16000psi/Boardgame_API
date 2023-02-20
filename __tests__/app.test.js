@@ -42,3 +42,26 @@ describe("GET /api/categories", () => {
         })
     })
 })
+
+describe("GET /api/reviews", () => {
+    test("responds with a 200 code and an object with a property of reviews which is an object", () => {
+        return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+            expect(typeof body.reviews).toBe("object")
+        })
+    })
+    // test("Array should contain correct ammount of objects with slug and description keys", () => {
+    //     return request(app)
+    //     .get("/api/categories")
+    //     .then(({body}) => {
+    //         expect(body.categories.length).toBe(4)
+    //         for (let i in body.categories) {
+    //             expect(body.categories[i].hasOwnProperty("slug")).toBeTruthy()
+    //             expect(body.categories[i].hasOwnProperty("description")).toBeTruthy()
+    //             expect(Object.keys(body.categories[i]).length).toBe(2)
+    //         }
+    //     })
+    // })
+})
