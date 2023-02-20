@@ -7,4 +7,8 @@ app.get("/api/categories", getCategories)
 
 app.get("/api/reviews", getReviews)
 
+app.use(handleCustomErrors)
+
+app.use(handle500Error);
+
 module.exports = app;

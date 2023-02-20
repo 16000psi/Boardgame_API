@@ -3,6 +3,7 @@ const app = require("./../app");
 const db = require("./../db/connection");
 const seed = require("./../db/seeds/seed");
 const testData = require("./../db/data/test-data/index.js");
+require ("jest-sorted")
 
 afterAll(() => {
   return db.end();
@@ -50,6 +51,7 @@ describe("GET /api/reviews", () => {
         .expect(200)
         .then(({body}) => {
             expect(Array.isArray (body.reviews)).toBeTruthy()
+            
         })
     })
     test("Array should contain correct ammount of objects with correct properties", () => {
@@ -81,10 +83,24 @@ describe("GET /api/reviews", () => {
         .then(({body}) => {
             const {reviews} = body
 
-            expect(reviews[0].comment_count).toBe(0)
-            expect(reviews[1].comment_count).toBe(3)
-            expect(reviews[2].comment_count).toBe(3)
-            expect(reviews[3].comment_count).toBe(0)
+            for (let i in reviews) {
+                if (reviews[i].review_id === 2) {
+                    expect(reviews[i].comment_count).toBe(3)
+                }
+                else if (reviews[i].review_id === 1) {
+                    expect (reviews[i].comment_count).toBe(0)
+                }
+            }
+
+        })
+    })
+    test("Reviews should be sorted by descending date order", () => {
+        return request(app)
+        .get("/api/reviews")
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews).toBeSortedBy("created_at", {descending:true})
+
 
         })
     })
