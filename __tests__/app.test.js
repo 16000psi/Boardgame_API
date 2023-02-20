@@ -21,22 +21,23 @@ describe("Incorrect GET request / 404", () => {
 })
 
 describe("GET /api/categories", () => {
-    test("responds with a 200 code and an array", () => {
+    test("responds with a 200 code and an object with a property of categories which is an array", () => {
         return request(app)
         .get("/api/categories")
         .expect(200)
         .then(({body}) => {
-            expect(Array.isArray (body)).toBeTruthy()
+            expect(Array.isArray (body.categories)).toBeTruthy()
         })
     })
-    test("Array should contain objects with slug and description keys", () => {
+    test("Array should contain correct ammount of objects with slug and description keys", () => {
         return request(app)
         .get("/api/categories")
         .then(({body}) => {
-            for (let i in body) {
-                expect(body[i].hasOwnProperty("slug")).toBeTruthy()
-                expect(body[i].hasOwnProperty("description")).toBeTruthy()
-                expect(Object.keys(body[i]).length).toBe(2)
+            expect(body.categories.length).toBe(4)
+            for (let i in body.categories) {
+                expect(body.categories[i].hasOwnProperty("slug")).toBeTruthy()
+                expect(body.categories[i].hasOwnProperty("description")).toBeTruthy()
+                expect(Object.keys(body.categories[i]).length).toBe(2)
             }
         })
     })
