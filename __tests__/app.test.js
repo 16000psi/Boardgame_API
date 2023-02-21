@@ -335,3 +335,145 @@ describe("POST /api/reviews/:review_id/comments", () => {
     })
 
 })
+
+describe("PATCH /api/reviews/:review_id", () => {
+    test("Responds with 202 status and review object when given a valid request", () =>{
+        const votesObject = {
+            inc_votes: -1
+        }
+        return request(app)
+        .patch("/api/reviews/4")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {review} = body
+            expect(typeof review).toBe("object")
+
+        })
+    })
+    test("Returned review object has correct properties", () => {
+        const votesObject = {
+            inc_votes: -1
+        }
+        return request(app)
+        .patch("/api/reviews/4")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {review} = body
+            expect(review).toMatchObject({
+                owner: expect.any(String),
+                title: expect.any(String),
+                review_id: expect.any(Number),
+                category: expect.any(String),
+                review_img_url: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                designer: expect.any(String),
+                review_body: expect.any(String)
+
+            })
+            expect(Object.keys(review).length).toBe(9)
+            expect(review.review_id).toBe(4)
+        })
+    })
+    test("Updated review should have the correctly adjusted vote property", () =>{
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/reviews/1")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {review} = body
+            expect(review.votes).toBe(2)
+
+        }).then(() => {
+
+            const votesObject2 = {
+                inc_votes: -2
+            }
+            return request(app)
+            .patch("/api/reviews/6")
+            .send(votesObject2)
+            .expect(202)
+            .then(({body}) => {
+                const {review} = body
+                expect(review.votes).toBe(6)
+    
+            })
+        })
+
+    })
+    test("Ignores extra properties on request object and returns succesfully", () => {
+        const votesObject = {
+            inc_votes: -1,
+            bleep: "bloop",
+            howManyVotesDoIlikeToSee : 0
+
+        }
+        return request(app)
+        .patch("/api/reviews/4")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {review} = body
+            expect(review).toMatchObject({
+                owner: expect.any(String),
+                title: expect.any(String),
+                review_id: expect.any(Number),
+                category: expect.any(String),
+                review_img_url: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                designer: expect.any(String),
+                review_body: expect.any(String)
+
+            })
+            expect(Object.keys(review).length).toBe(9)
+            expect(review.review_id).toBe(4)
+        })
+    })
+    test("Responds with 404 status if review_id does not contain a review" , () => {
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/reviews/1735735")
+        .send(votesObject)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+
+        })
+    })
+    test("Responds with 400 error if specified review ID is not a number" , () => {
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/reviews/dshgsdghs")
+        .send(votesObject)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+
+        })
+
+    })
+    test("Responds with 400 error if request object incomplete" , () => {
+        const votesObject = {
+
+        }
+        return request(app)
+        .patch("/api/reviews/5")
+        .send(votesObject)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
+
+    })
+})
