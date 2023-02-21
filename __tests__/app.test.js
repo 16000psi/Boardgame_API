@@ -145,8 +145,72 @@ describe("GET /api/reviews/:review_id", () => {
         .expect(404)
         .then(({body}) => {
             expect(body).toEqual({msg: "Item not found."})
+        })
+    })
+})
+
+describe("GET /api/reviews/:review_id/comments", () => {
+    test("Responds with 200 status and object containing array of comments" , () => {
+        return request(app)
+        .get("/api/reviews/3/comments")
+        .expect(200)
+        .then(({body}) => {
+            expect(Array.isArray (body.comments)).toBeTruthy()
 
         })
+
+    })
+    test("Returned comments should have the correct keys", () => {
+        return request(app)
+        .get("/api/reviews/3/comments")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            comments.forEach((comment) => {
+            expect(comment).toMatchObject({
+                comment_id: expect.any(Number),
+                body: expect.any(String),
+                review_id: expect.any(Number),
+                author: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+            })
+            expect(comment.review_id).toBe(3)
+            expect(Object.keys(comment).length).toBe(6)
+            })
+        })
+    })
+
+    test("Returned comments should be in descending date order", () => {
+        return request(app)
+        .get("/api/reviews/3/comments")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments).toBeSortedBy("created_at", {descending:true})
+        })
+    })
+    test("Returns 200 and empty array in comments if there are no comments for the review", () => {
+        return request(app)
+        .get("/api/reviews/1/comments")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments).toEqual([])
+
+        })
+
+    })
+
+    test("Responds with 404 status if review_id does not contain a review" , () => {
+        return request(app)
+        .get("/api/reviews/5000/comments")
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+
+        })
+
 
     })
 })
