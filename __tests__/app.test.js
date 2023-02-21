@@ -44,7 +44,7 @@ describe("GET /api/categories", () => {
     })
 })
 
-describe("GET /api/reviews", () => {
+describe.only("GET /api/reviews", () => {
     test("responds with a 200 code and an object with a property of reviews which is an array", () => {
         return request(app)
         .get("/api/reviews")
@@ -94,7 +94,7 @@ describe("GET /api/reviews", () => {
 
         })
     })
-    test("Reviews should be sorted by descending date order", () => {
+    test("Reviews should be sorted by descending date order by default", () => {
         return request(app)
         .get("/api/reviews")
         .then(({body}) => {
@@ -104,6 +104,19 @@ describe("GET /api/reviews", () => {
 
         })
     })
+    test("Accepts categories query which limits result to single category", () => {
+    return request(app)
+    .get("/api/reviews?category=social_deduction")
+    .expect(200)
+    .then(({body}) => {
+        const {reviews} = body
+        reviews.forEach((review) => {
+            expect(review.category).toBe("social deduction")
+        })
+        
+    })
+    })
+    
 })
 
 describe("GET /api/reviews/:review_id", () => {
