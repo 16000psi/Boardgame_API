@@ -9,7 +9,7 @@ function fetchReviewById (review_id) {
     [review_id])
     .then((result) => {
         if (result.rows.length < 1) {
-            return Promise.reject("Bad request.")
+            return Promise.reject("Item not found.")
         }
         else {
             return result.rows[0]

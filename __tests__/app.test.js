@@ -136,14 +136,15 @@ describe("GET /api/reviews/:review_id", () => {
 
             })
             expect(Object.keys(review).length).toBe(9)
+            expect(review.review_id).toBe(5)
         })
     })
     test("Responds with 400 error if specified review ID does not exist" , () => {
         return request(app)
         .get("/api/reviews/5000")
-        .expect(400)
+        .expect(404)
         .then(({body}) => {
-            expect(body).toEqual({msg: "Bad request."})
+            expect(body).toEqual({msg: "Item not found."})
 
         })
 
