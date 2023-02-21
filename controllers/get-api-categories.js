@@ -1,7 +1,7 @@
-const categories = require("../db/data/test-data/categories")
 const fetchCategories = require ("./../models/fetch-categories")
 
 function getCategories  (req, res, next) {
+
 
     fetchCategories()
     .then((categories) => {
