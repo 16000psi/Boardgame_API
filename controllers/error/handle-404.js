@@ -1,5 +1,8 @@
-function handle404 (req, res, next) {
-    res.status(404).send({msg : "Path not found."})
+function handle404 (error, req, res, next) {
+    if (error === "Item not found.") {
+        res.status(404).send({msg : "Item not found."})
+    }
+    next(error)
 }
 
 module.exports = handle404
