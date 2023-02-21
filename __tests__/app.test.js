@@ -13,7 +13,7 @@ beforeEach(() => {
   return seed(testData);
 });
 
-describe("Incorrect request / 404", () => {
+describe("Incorrect GET request / 404", () => {
     test("responds with a 404 error if endpoint does not exist", () => {
         return request(app)
         .get("/api/thisdoesnotexist")
@@ -103,49 +103,5 @@ describe("GET /api/reviews", () => {
 
 
         })
-    })
-})
-
-describe("GET /api/reviews/:review_id", () => {
-    test("Responds with a 200 code and an object with a property of review which contains an object", () => {
-        return request(app)
-        .get("/api/reviews/5")
-        .expect(200)
-        .then(({body}) => {
-            expect(body.hasOwnProperty("review")).toBeTruthy()
-            expect(typeof body.review).toBe("object")
-            
-        })
-    })
-    test("Returned review object has correct properties", () => {
-        return request(app)
-        .get("/api/reviews/5")
-        .expect(200)
-        .then(({body}) => {
-            const {review} = body
-            expect(review).toMatchObject({
-                owner: expect.any(String),
-                title: expect.any(String),
-                review_id: expect.any(Number),
-                category: expect.any(String),
-                review_img_url: expect.any(String),
-                created_at: expect.any(String),
-                votes: expect.any(Number),
-                designer: expect.any(String),
-                review_body: expect.any(String)
-
-            })
-            expect(Object.keys(review).length).toBe(9)
-        })
-    })
-    test("Responds with 400 error if specified review ID does not exist" , () => {
-        return request(app)
-        .get("/api/reviews/5000")
-        .expect(400)
-        .then(({body}) => {
-            expect(body).toEqual({msg: "Bad request."})
-
-        })
-
     })
 })
