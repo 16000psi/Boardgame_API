@@ -6,6 +6,11 @@ function handle400 (error, req, res, next) {
         res.status(400).send({msg : "Username does not exist."})
 
     }
+
+    if (error === "Request incomplete.") {
+        res.status(400).send({msg : "Request incomplete."})
+
+    }
     next(error)
 }
 

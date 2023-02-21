@@ -6,6 +6,8 @@ const format = require ("pg-format")
 
 function addComment (review_id, newComment) {
 
+
+
     return fetchReviewById(review_id).then((result) => {
         if (result.length === 0) {
             return Promise.reject("Item not found.")
@@ -14,6 +16,11 @@ function addComment (review_id, newComment) {
     .then(() => {
 
         return fetchUsers().then((result) => {
+
+            if (newComment.hasOwnProperty("username") === false || newComment.hasOwnProperty("body") === false) {
+    
+                return Promise.reject("Request incomplete.")
+            }
             
             const filtered = result.filter((user) => {
                 if (user.username === newComment.username) {
@@ -28,6 +35,8 @@ function addComment (review_id, newComment) {
 
     })
     .then(() => {
+
+
 
         const formatStr = format(`
         INSERT INTO comments

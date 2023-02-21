@@ -178,8 +178,35 @@ describe("POST /api/reviews/:review_id/comments", () => {
         .then(({body}) => {
             const {comment} = body
             expect(comment).toMatchObject({
-                body: expect.any(String),
-                author: expect.any(String),
+                body: "Wow! What a FANTASTIC api!!",
+                author: "philippaclaire9",
+                comment_id: expect.any(Number),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                review_id: expect.any(Number)
+
+
+            })
+            
+        })
+    })
+    test("Ignores extra comment properties and returns successfully", () => {
+        const newComment = {
+            username: "philippaclaire9",
+            body: "Let me start by thanking you for such a lovely opportunity to comment.",
+            body2: "Would you believe its been some time since i used this website",
+            body3: "And back in my day things worked a little differently.",
+        }
+        return request(app)
+        .post("/api/reviews/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({body}) => {
+            const {comment} = body
+            expect(Object.keys(comment).length).toBe(6)
+            expect(comment).toMatchObject({
+                body: "Let me start by thanking you for such a lovely opportunity to comment.",
+                author: "philippaclaire9",
                 comment_id: expect.any(Number),
                 created_at: expect.any(String),
                 votes: expect.any(Number),
@@ -207,9 +234,37 @@ describe("POST /api/reviews/:review_id/comments", () => {
         }
         return request(app)
         .post("/api/reviews/1/comments")
+        .send(newComment)
         .expect(400)
         .then(({body}) => {
             expect(body).toEqual({msg: "Username does not exist."})
+
+        })
+
+    })
+    test("Responds with 400 error if request object incomplete" , () => {
+        const newComment = {
+            username: "dodgyRouter2k20"
+        }
+        return request(app)
+        .post("/api/reviews/1/comments")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
+
+    })
+    test("Responds with 400 error if specified review ID is not a number" , () => {
+        const newComment = {
+            username: "dumguy49",
+            body: "uhhhh how internet work??"
+        }
+        return request(app)
+        .post("/api/reviews/ddddd/comments")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
 
         })
 
