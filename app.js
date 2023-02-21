@@ -1,5 +1,5 @@
 const express = require("express");
-const { handle500Error, handleCustomErrors, getCategories, getReviews, getReviewById, handle404, handle400, handle404NoEndpoint } = require("./controllers/index");
+const { handle500Error, handleCustomErrors, getCategories, getReviews, getReviewById, handle404, handle400, handle404NoEndpoint, postComment } = require("./controllers/index");
 
 const app = express();
 
@@ -8,6 +8,10 @@ app.get("/api/categories", getCategories)
 app.get("/api/reviews", getReviews)
 
 app.get("/api/reviews/:review_id", getReviewById)
+
+
+
+app.post("/api/reviews/:review_id/comments", postComment)
 
 app.use(handle404NoEndpoint)
 
