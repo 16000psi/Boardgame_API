@@ -9,7 +9,8 @@ function fetchCommentsByReview (review_id) {
         }
     }).then(() => {
     return db.query(`SELECT * FROM comments
-    where review_id = $1;`, [review_id])
+    where review_id = $1
+    ORDER BY created_at DESC;`, [review_id])
     .then(({rows}) => {
         return rows
     })

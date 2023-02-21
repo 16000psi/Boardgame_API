@@ -145,9 +145,7 @@ describe("GET /api/reviews/:review_id", () => {
         .expect(404)
         .then(({body}) => {
             expect(body).toEqual({msg: "Item not found."})
-
         })
-
     })
 })
 
@@ -181,7 +179,16 @@ describe("GET /api/reviews/:review_id/comments", () => {
             expect(Object.keys(comment).length).toBe(6)
             })
         })
+    })
 
+    test("Returned comments should be in descending date order", () => {
+        return request(app)
+        .get("/api/reviews/3/comments")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments).toBeSortedBy("created_at", {descending:true})
+        })
     })
     test("Returns 200 and empty array in comments if there are no comments for the review", () => {
         return request(app)
