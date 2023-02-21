@@ -139,7 +139,7 @@ describe("GET /api/reviews/:review_id", () => {
             expect(review.review_id).toBe(5)
         })
     })
-    test("Responds with 400 error if specified review ID does not exist" , () => {
+    test("Responds with 404 error if specified review ID does not exist" , () => {
         return request(app)
         .get("/api/reviews/5000")
         .expect(404)
@@ -149,4 +149,70 @@ describe("GET /api/reviews/:review_id", () => {
         })
 
     })
+})
+
+describe("POST /api/reviews/:review_id/comments", () => {
+    test("Responds with 201 and a comment object", () => {
+        const newComment = {
+            username: "philippaclaire9",
+            body: "Wow! What a FANTASTIC api!!"
+        }
+        return request(app)
+        .post("/api/reviews/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({body}) => {
+            const {comment} = body
+            expect(typeof comment).toBe("object")
+        })
+    })
+    test("Returned comment must have the correct keys", () => {
+        const newComment = {
+            username: "philippaclaire9",
+            body: "Wow! What a FANTASTIC api!!"
+        }
+        return request(app)
+        .post("/api/reviews/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({body}) => {
+            const {comment} = body
+            expect(comment).toMatchObject({
+                body: expect.any(String),
+                author: expect.any(String),
+                comment_id: expect.any(Number),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                review_id: expect.any(Number)
+
+
+            })
+            
+        })
+    })
+    test("Responds with 404 error if specified review ID does not exist" , () => {
+        return request(app)
+        .post("/api/reviews/5555/comments")
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+
+        })
+
+    })
+    test("Responds with 400 error if specified username does not exist" , () => {
+        const newComment = {
+            username: "suspiciousPerson1982",
+            body: "Hahah! Ur website sux"
+        }
+        return request(app)
+        .post("/api/reviews/1/comments")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Username does not exist."})
+
+        })
+
+    })
+
 })

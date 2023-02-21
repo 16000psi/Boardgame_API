@@ -3,6 +3,8 @@ const { handle500Error, handleCustomErrors, getCategories, getReviews, getReview
 
 const app = express();
 
+app.use(express.json())
+
 app.get("/api/categories", getCategories)
 
 app.get("/api/reviews", getReviews)
