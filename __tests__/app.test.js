@@ -116,13 +116,12 @@ describe("GET /api/reviews", () => {
         
     })
     })
-    test("Incorrect category returns 200 with no results", () => {
+    test("Incorrect category returns 400", () => {
         return request(app)
         .get("/api/reviews?category=social_deductiog")
-        .expect(200)
+        .expect(400)
         .then(({body}) => {
-            const {reviews} = body
-            expect(reviews.length).toBe(0)
+            expect(body).toEqual({msg: "Bad request."})
            
             
         })

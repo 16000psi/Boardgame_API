@@ -27,12 +27,12 @@ fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category) =>
         LEFT JOIN comments ON reviews.review_id = comments.review_id `
     
         if (category) {
-            category.replace(/_/g, " ")
+            category = category.replace(/_/g, " ")
             if (slugs.includes(category)) {
                 queryString += `WHERE category = \'${category}\' `    
             }
             else {
-                return []
+                return Promise.reject("Bad request.")
             }
         }
     
