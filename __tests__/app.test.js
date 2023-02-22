@@ -336,6 +336,37 @@ describe("POST /api/reviews/:review_id/comments", () => {
 
 })
 
+
+describe ("GET /api/users", () => {
+    test("Returns with status 200 and an array of users", () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({body}) => {
+            console.log(body.users)
+            expect(Array.isArray (body.users)).toBeTruthy()
+        })
+    })
+    test("Array should contain correct ammount of objects with the correct keys", () => {
+        return request(app)
+        .get("/api/users")
+        .then(({body}) => {
+            const {users} = body
+            expect(users.length).toBe(4)
+            users.forEach((user) => {
+                expect(user).toMatchObject ({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+
+                })
+                expect(Object.keys(user).length).toBe(3)
+            })
+
+        })
+    })
+})
+
 describe("PATCH /api/reviews/:review_id", () => {
     test("Responds with 202 status and review object when given a valid request", () =>{
         const votesObject = {
@@ -477,3 +508,4 @@ describe("PATCH /api/reviews/:review_id", () => {
 
     })
 })
+

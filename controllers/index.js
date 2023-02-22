@@ -8,4 +8,6 @@ exports.handle400 = require ("./error/handle-400")
 exports.handle404 = require ("./error/handle-404")
 exports.postComment = require("./post-comment")
 exports.getCommentsPerReview = require ("./get-api-reviews-reviewid-comments")
+exports.getUsers = require ("./get-api-users")
 exports.patchReviewVotes = require ("./patch-review-votes")
+
