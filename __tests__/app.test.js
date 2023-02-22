@@ -439,7 +439,6 @@ describe("POST /api/reviews/:review_id/comments", () => {
 
 })
 
-
 describe ("GET /api/users", () => {
     test("Returns with status 200 and an array of users", () => {
         return request(app)
@@ -612,3 +611,35 @@ describe("PATCH /api/reviews/:review_id", () => {
     })
 })
 
+describe.only("GET /api", () => {
+    test("Responds with a server status 200 and an api json object", () => {
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({body}) => {
+            api = JSON.parse(body.api)
+            expect(typeof api).toBe("object")
+        })
+
+    })
+    test("Returned api json object should have properties for each endpoint", () => {
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({body}) => {
+            api = JSON.parse(body.api)
+            const keys = Object.keys(api)
+            expect(keys.includes("GET /api")).toBeTruthy()
+            expect(keys.includes("GET /api/categories")).toBeTruthy()
+            expect(keys.includes("GET /api/reviews")).toBeTruthy()
+            expect(keys.includes("GET /api/reviews/:review_id")).toBeTruthy()
+            expect(keys.includes("GET /api/users")).toBeTruthy()
+            expect(keys.includes("GET /api/reviews/:review_id/comments")).toBeTruthy()
+            expect(keys.includes("POST /api/reviews/:review_id/comments")).toBeTruthy()
+            expect(keys.includes("PATCH /api/reviews/:review_id")).toBeTruthy()
+            expect(keys.includes("DELETE /api/comments/:comment_id")).toBeTruthy()
+
+        })
+
+    })
+})

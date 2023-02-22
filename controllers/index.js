@@ -10,4 +10,5 @@ exports.postComment = require("./post-comment")
 exports.getCommentsPerReview = require ("./get-api-reviews-reviewid-comments")
 exports.getUsers = require ("./get-api-users")
 exports.patchReviewVotes = require ("./patch-review-votes")
+exports.getApi = require ("./get-api")
 
