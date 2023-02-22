@@ -94,7 +94,7 @@ describe("GET /api/reviews", () => {
 
         })
     })
-    test("Reviews should be sorted by descending date order", () => {
+    test("Reviews should be sorted by descending date order by default", () => {
         return request(app)
         .get("/api/reviews")
         .then(({body}) => {
@@ -102,6 +102,98 @@ describe("GET /api/reviews", () => {
             expect(reviews).toBeSortedBy("created_at", {descending:true})
 
 
+        })
+    })
+    test("Accepts categories query which limits result to single category", () => {
+    return request(app)
+    .get("/api/reviews?category=social_deduction")
+    .expect(200)
+    .then(({body}) => {
+        const {reviews} = body
+        reviews.forEach((review) => {
+            expect(review.category).toBe("social deduction")
+        })
+        
+    })
+    })
+    test("Category query that exists with no reviews returns 200 with an empty array.", () => {
+        return request(app)
+        .get("/api/reviews?category=children%27s_games")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews.length).toBe(0)
+
+            
+        })
+        })
+    test("Incorrect category returns 404", () => {
+        return request(app)
+        .get("/api/reviews?category=social_deductiog")
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+           
+            
+        })
+    })
+    test("Accepts sort by query which sorts results by that column (default descending order)", () => {
+        return request(app)
+        .get("/api/reviews?sort_by=comment_count")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews).toBeSortedBy("comment_count", {descending:true})
+            
+        })
+        .then(() => {
+            return request(app)
+            .get("/api/reviews?sort_by=designer")
+            .expect(200)
+            .then(({body}) => {
+                const {reviews} = body
+                expect(reviews).toBeSortedBy("designer", {descending:true})
+            
+            })
+        })
+    })
+    test("Invalid sort by query returns 400 error", () => {
+        return request(app)
+        .get("/api/reviews?sort_by=evilSqlHack")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+           
+            
+        })
+    })
+    test("Accepts sort order query which dictates whether results are in ascending or descending order", () => {
+        return request(app)
+        .get("/api/reviews?sort_by=review_id&order=ASC")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews).toBeSortedBy("review_id", {ascending:true})
+            
+        })
+        .then(() => {
+            return request(app)
+            .get("/api/reviews?sort_by=comment_count&order=ASC")
+            .expect(200)
+            .then(({body}) => {
+                const {reviews} = body
+                expect(reviews).toBeSortedBy("comment_count", {ascending:true})
+            
+            })
+        })
+    })
+    test("Invalid order by query returns 400 error", () => {
+        return request(app)
+        .get("/api/reviews?order=stealDBBadStuff")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+           
         })
     })
 })
