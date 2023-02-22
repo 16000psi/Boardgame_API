@@ -116,12 +116,23 @@ describe("GET /api/reviews", () => {
         
     })
     })
-    test("Incorrect category returns 400", () => {
+    test("Category query that exists with no reviews returns 200 with an empty array.", () => {
+        return request(app)
+        .get("/api/reviews?category=children%27s_games")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews.length).toBe(0)
+
+            
+        })
+        })
+    test("Incorrect category returns 404", () => {
         return request(app)
         .get("/api/reviews?category=social_deductiog")
-        .expect(400)
+        .expect(404)
         .then(({body}) => {
-            expect(body).toEqual({msg: "Bad request."})
+            expect(body).toEqual({msg: "Item not found."})
            
             
         })

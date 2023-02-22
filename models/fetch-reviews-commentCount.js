@@ -28,11 +28,14 @@ fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category) =>
     
         if (category) {
             category = category.replace(/_/g, " ")
+            
             if (slugs.includes(category)) {
+
+                category = category.replace(/'/g, "''")
                 queryString += `WHERE category = \'${category}\' `    
             }
             else {
-                return Promise.reject("Bad request.")
+                return Promise.reject("Item not found.")
             }
         }
     
