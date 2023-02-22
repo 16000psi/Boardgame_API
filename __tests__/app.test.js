@@ -389,22 +389,22 @@ describe("PATCH /api/reviews/:review_id", () => {
             const {review} = body
             expect(review.votes).toBe(2)
 
-        }).then(() => {
-
-            const votesObject2 = {
-                inc_votes: -2
-            }
-            return request(app)
-            .patch("/api/reviews/6")
-            .send(votesObject2)
-            .expect(202)
-            .then(({body}) => {
-                const {review} = body
-                expect(review.votes).toBe(6)
-    
-            })
         })
 
+    })
+    test("Updated review should have the correctly adjusted vote property", () => {
+        const votesObject2 = {
+            inc_votes: -2
+        }
+        return request(app)
+        .patch("/api/reviews/6")
+        .send(votesObject2)
+        .expect(202)
+        .then(({body}) => {
+            const {review} = body
+            expect(review.votes).toBe(6)
+
+        })
     })
     test("Ignores extra properties on request object and returns succesfully", () => {
         const votesObject = {
