@@ -117,7 +117,7 @@ describe("GET /api/reviews/:review_id", () => {
             
         })
     })
-    test("Returned review object has correct properties", () => {
+    test("Returned review object has correct properties including comment count", () => {
         return request(app)
         .get("/api/reviews/5")
         .expect(200)
@@ -131,12 +131,23 @@ describe("GET /api/reviews/:review_id", () => {
                 review_img_url: expect.any(String),
                 created_at: expect.any(String),
                 votes: expect.any(Number),
+                comment_count: expect.any(Number),
                 designer: expect.any(String),
                 review_body: expect.any(String)
 
             })
-            expect(Object.keys(review).length).toBe(9)
+            expect(Object.keys(review).length).toBe(10)
             expect(review.review_id).toBe(5)
+        })
+    })
+    test("Returned review object should have the correct comment count", () => {
+        return request(app)
+        .get("/api/reviews/2")
+        .expect(200)
+        .then(({body}) => {
+            const {review} = body
+            expect(review.comment_count).toBe(3)
+            expect(review.review_id).toBe(2)
         })
     })
     test("Responds with 404 error if specified review ID does not exist" , () => {
