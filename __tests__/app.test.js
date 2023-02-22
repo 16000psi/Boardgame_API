@@ -611,7 +611,7 @@ describe("PATCH /api/reviews/:review_id", () => {
     })
 })
 
-describe.only("GET /api", () => {
+describe("GET /api", () => {
     test("Responds with a server status 200 and an api json object", () => {
         return request(app)
         .get("/api")
