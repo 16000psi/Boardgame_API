@@ -1,8 +1,12 @@
-const fetchApi = require ("./../models/fetch-api")
+const fs = require ("fs/promises")
 
 function getApi (req, res, next) {
 
-    fetchApi().then((api) => {
+    return fs
+    .readFile(`${__dirname}/../endpoints.json`, "utf-8")
+    .then ((result) => {
+        return result
+    }).then((api) => {
         res.status(200).send({api})
     })
     .catch((error) => {
