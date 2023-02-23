@@ -1054,5 +1054,31 @@ describe("POST /api/categories", () => {
     })
 })
 
+describe("DELETE /api/reviews", () => {
+    test("responds with a 204 code if a comment has been successfully deleted", () => {
+        return request(app)
+        .delete("/api/reviews/1")
+        .expect(204)
+    })
+    test("responds with a 400 code if review id parameter is not a number", () => {
+        return request(app)
+        .delete("/api/reviews/1stealythyEvilStealcardDetailsPlz")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+        })
+    })
+    test("responds with a 400 code if no review exists in database with comment id", () => {
+        return request(app)
+        .delete("/api/reviews/5000")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+        })
+    })
+
+
+})
+
 
 
