@@ -1,11 +1,14 @@
 const express = require("express");
 
-const { handle500Error, handleCustomErrors, getCategories, getReviews, getReviewById, handle404, handle400, handle404NoEndpoint, getCommentsPerReview, postComment, getUsers, patchReviewVotes, deleteComment  } = require("./controllers/index");
+
+const { handle500Error, handleCustomErrors, getCategories, getReviews, getReviewById, handle404, handle400, handle404NoEndpoint, getCommentsPerReview, postComment, getUsers, patchReviewVotes, deleteComment, getApi   } = require("./controllers/index");
 
 
 const app = express();
 
 app.use(express.json())
+
+app.get("/api", getApi)
 
 app.get("/api/categories", getCategories)
 
