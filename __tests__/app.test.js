@@ -957,5 +957,102 @@ describe("POST /api/reviews", () => {
     })
 })
 
+describe("POST /api/categories", () => {
+    test("Responds with 201 and a category object", () => {
+        const newCategory = {
+            slug: "card gamez",
+            description: "52 pickup!! hahah lol"
+        }
+        return request(app)
+        .post("/api/categories")
+        .send(newCategory)
+        .expect(201)
+        .then(({body}) => {
+            const {category} = body
+            expect(typeof category).toBe("object")
+        })
+    })
+    test("Returned comment must have the correct keys", () => {
+        const newCategory = {
+            slug: "card gamez",
+            description: "52 pickup!! hahah lol"
+        }
+        return request(app)
+        .post("/api/categories")
+        .send(newCategory)
+        .expect(201)
+        .then(({body}) => {
+            const {category} = body
+            expect(category).toMatchObject({
+                slug: "card gamez",
+                description: "52 pickup!! hahah lol"
+            })
+            expect(Object.keys(category).length).toBe(2)
+            
+        })
+    })
+    test("Ignores extra category properties and returns successfully", () => {
+        const newCategory = {
+            slug: "card gamez",
+            description: "52 pickup!! hahah lol",
+            username: "philippaclaire9",
+            body: "Let me start by thanking you for such a lovely opportunity to comment.",
+            body2: "Would you believe its been some time since i used this website",
+            body3: "And back in my day things worked a little differently.",
+        }
+        return request(app)
+        .post("/api/categories")
+        .send(newCategory)
+        .expect(201)
+        .then(({body}) => {
+            const {category} = body
+            expect(category).toMatchObject({
+                slug: "card gamez",
+                description: "52 pickup!! hahah lol"
+            })
+            expect(Object.keys(category).length).toBe(2)
+            
+        })
+    })
+    test("Responds with 404 error if specified review ID does not exist" , () => {
+        return request(app)
+        .post("/api/reviews/5555/comments")
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+
+        })
+
+    })
+    test("Responds with 400 error if specified category slug already exists" , () => {
+        const newCategory = {
+            slug: "dexterity",
+            description: "quick agile nifty fingers haha! "
+        }
+        return request(app)
+        .post("/api/categories")
+        .send(newCategory)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item already exists."})
+
+        })
+
+    })
+    test("Responds with 400 error if request object incomplete" , () => {
+        const newCategory = {
+            username: "dodgyRouter2k20"
+        }
+        return request(app)
+        .post("/api/categories")
+        .send(newCategory)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
+    })
+})
+
 
 
