@@ -704,4 +704,138 @@ describe("GET /api/users/:username", () => {
     })
 })
 
+describe("PATCH /api/comments/:comment_id", () => {
+    test("Responds with 202 status and comment object when given a valid request", () =>{
+        const votesObject = {
+            inc_votes: -1
+        }
+        return request(app)
+        .patch("/api/comments/3")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {comment} = body
+            expect(typeof comment).toBe("object")
+
+        })
+    })
+    test("Returns comment object has correct properties", () => {
+        const votesObject = {
+            inc_votes: -1
+        }
+        return request(app)
+        .patch("/api/comments/3")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {comment} = body
+            expect(comment).toMatchObject({
+                review_id: expect.any(Number),
+                body: expect.any(String),
+                comment_id: 3,
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String)
+            })
+            expect(Object.keys(comment).length).toBe(6)
+        })
+    })
+    test("Updated comment should have the correctly adjusted vote property", () =>{
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/comments/1")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {comment} = body
+            expect(comment.votes).toBe(17)
+
+        })
+
+    })
+    test("Updated comment should have the correctly adjusted vote property", () => {
+        const votesObject2 = {
+            inc_votes: -2
+        }
+        return request(app)
+        .patch("/api/comments/6")
+        .send(votesObject2)
+        .expect(202)
+        .then(({body}) => {
+            const {comment} = body
+            expect(comment.votes).toBe(8)
+
+        })
+    })
+    test("Ignores extra properties on request object and returns succesfully", () => {
+        const votesObject = {
+            inc_votes: -1,
+            bleep: "bloop",
+            howManyVotesDoIlikeToSee : 0
+
+        }
+        return request(app)
+        .patch("/api/comments/6")
+        .send(votesObject)
+        .expect(202)
+        .then(({body}) => {
+            const {comment} = body
+            expect(comment).toMatchObject({
+                review_id: expect.any(Number),
+                body: expect.any(String),
+                comment_id: 6,
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String)
+
+            })
+            expect(Object.keys(comment).length).toBe(6)
+        })
+    })
+    test("Responds with 404 status if comment_id does not contain a review" , () => {
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/comments/1735735")
+        .send(votesObject)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+
+        })
+    })
+    test("Responds with 400 error if specified comment ID is not a number" , () => {
+        const votesObject = {
+            inc_votes: 1
+        }
+        return request(app)
+        .patch("/api/comments/dshgsdghs")
+        .send(votesObject)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+
+        })
+
+    })
+    test("Responds with 400 error if request object incomplete" , () => {
+        const votesObject = {
+
+        }
+        return request(app)
+        .patch("/api/comments/5")
+        .send(votesObject)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
+
+    })
+})
+
+
 
