@@ -439,7 +439,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
 
 })
 
-describe ("GET /api/users", () => {
+describe("GET /api/users", () => {
     test("Returns with status 200 and an array of users", () => {
         return request(app)
         .get("/api/users")
@@ -609,7 +609,6 @@ describe("PATCH /api/reviews/:review_id", () => {
 
     })
 })
-
 
 describe("GET /api", () => {
     test("Responds with a server status 200 and an api json object", () => {
