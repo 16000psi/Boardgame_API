@@ -7,6 +7,10 @@ function handle400 (error, req, res, next) {
 
     }
 
+    if (error === "Item already exists.") {
+        res.status(400).send({msg : "Item already exists."})
+    }
+
     if (error === "Request incomplete.") {
         res.status(400).send({msg : "Request incomplete."})
 
