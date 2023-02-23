@@ -669,4 +669,39 @@ describe("DELETE /api/comments/:comment_id", () => {
 
 })
 
+describe("GET /api/users/:username", () => {
+    test("Responds with a 200 code and an object with a property of user which contains an object", () => {
+        return request(app)
+        .get("/api/users/philippaclaire9")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.hasOwnProperty("user")).toBeTruthy()
+            expect(typeof body.user).toBe("object")
+            
+        })
+    })
+    test("Returned user object has correct properties", () => {
+        return request(app)
+        .get("/api/users/philippaclaire9")
+        .expect(200)
+        .then(({body}) => {
+            const {user} = body
+            expect(user).toMatchObject({
+                username: "philippaclaire9",
+                avatar_url: expect.any(String),
+                name: expect.any(String)
+            })
+            expect(Object.keys(user).length).toBe(3)
+        })
+    })
+    test("Responds with 404 error if specified username does not exist" , () => {
+        return request(app)
+        .get("/api/users/cancelledThenFiredFromCompany")
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Item not found."})
+        })
+    })
+})
+
 
