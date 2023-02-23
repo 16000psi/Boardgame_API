@@ -415,6 +415,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
         }
         return request(app)
         .post("/api/reviews/1/comments")
+        .send(newComment)
         .expect(400)
         .then(({body}) => {
             expect(body).toEqual({msg: "Request incomplete."})
@@ -834,6 +835,125 @@ describe("PATCH /api/comments/:comment_id", () => {
 
         })
 
+    })
+})
+
+describe("POST /api/reviews", () => {
+    test("Responds with 201 and a review object", () => {
+        const newReview = {
+            review_body: "sucks",
+            owner: "philippaclaire9",
+            title: "i dont like boardgames",
+            designer: "globocorp games",
+            review_img_url: "blooop",
+            category: "dexterity"
+        }
+        return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(201)
+        .then(({body}) => {
+            const {review} = body
+            expect(typeof review).toBe("object")
+        })
+    })
+    test("Returned review must have the correct keys", () => {
+        const newReview = {
+            review_body: "sucks",
+            owner: "philippaclaire9",
+            title: "i dont like boardgames",
+            designer: "globocorp games",
+            review_img_url: "blooop",
+            category: "dexterity"
+        }
+        return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(201)
+        .then(({body}) => {
+            const {review} = body
+            expect(review).toMatchObject({
+                review_id: expect.any(Number),
+                title: 'i dont like boardgames',
+                category: 'dexterity',
+                designer: 'globocorp games',
+                owner: 'philippaclaire9',
+                review_body: 'sucks',
+                review_img_url: 'blooop',
+                created_at: expect.any(String),
+                votes: 0,
+                comment_count: 0
+            })
+            expect(Object.keys(review).length).toBe(10)
+            
+        })
+    })
+    test("Ignores extra review properties and returns successfully", () => {
+        const newReview = {
+            username: "philippaclaire9",
+            body: "Let me start by thanking you for such a lovely opportunity to comment.",
+            body2: "Would you believe its been some time since i used this website",
+            body3: "And back in my day things worked a little differently.",
+            review_body: "sucks",
+            owner: "philippaclaire9",
+            title: "i dont like boardgames",
+            designer: "globocorp games",
+            review_img_url: "blooop",
+            category: "dexterity"
+        }
+        return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(201)
+        .then(({body}) => {
+            const {review} = body
+            expect(review).toMatchObject({
+                review_id: expect.any(Number),
+                title: 'i dont like boardgames',
+                category: 'dexterity',
+                designer: 'globocorp games',
+                owner: 'philippaclaire9',
+                review_body: 'sucks',
+                review_img_url: 'blooop',
+                created_at: expect.any(String),
+                votes: 0,
+                comment_count: 0
+            })
+            expect(Object.keys(review).length).toBe(10)
+            
+        })
+    })
+    test("Responds with 400 error if specified username does not exist" , () => {
+        const newReview = {
+            review_body: "sucks",
+            owner: "exemployeeloser",
+            title: "i dont like boardgames",
+            designer: "globocorp games",
+            review_img_url: "blooop",
+            category: "dexterity"
+        }
+        return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Username does not exist."})
+
+        })
+
+    })
+    test("Responds with 400 error if request object incomplete" , () => {
+        const newReview = {
+            username: "dodgyRouter2k20"
+        }
+        return request(app)
+        .post("/api/reviews")
+        .send(newReview)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
     })
 })
 

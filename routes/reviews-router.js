@@ -1,8 +1,10 @@
 const reviewsRouter = require("express").Router()
 
-const {getReviews, getReviewById, getCommentsPerReview, postComment, patchReviewVotes } = require("./../controllers/index");
+const {getReviews, getReviewById, getCommentsPerReview, postReview, postComment, patchReviewVotes } = require("./../controllers/index");
 
-reviewsRouter.get("/", getReviews)
+reviewsRouter.route("/")
+.get(getReviews)
+.post(postReview)
 
 reviewsRouter.route("/:review_id")
 .get(getReviewById)
