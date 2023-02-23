@@ -445,7 +445,6 @@ describe ("GET /api/users", () => {
         .get("/api/users")
         .expect(200)
         .then(({body}) => {
-            console.log(body.users)
             expect(Array.isArray (body.users)).toBeTruthy()
         })
     })
@@ -611,6 +610,7 @@ describe("PATCH /api/reviews/:review_id", () => {
     })
 })
 
+
 describe("GET /api", () => {
     test("Responds with a server status 200 and an api json object", () => {
         return request(app)
@@ -643,3 +643,31 @@ describe("GET /api", () => {
 
     })
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+    test("responds with a 204 code if a comment has been successfully deleted", () => {
+        return request(app)
+        .delete("/api/comments/5")
+        .expect(204)
+    })
+    test("responds with a 400 code if comment id parameter is not a number", () => {
+        return request(app)
+        .delete("/api/comments/stealythyEvilStealcardDetailsPlz")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+        })
+    })
+    test("responds with a 400 code if no comment exists in database with comment id", () => {
+        return request(app)
+        .delete("/api/comments/5000")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Bad request."})
+        })
+    })
+
+
+})
+
+
