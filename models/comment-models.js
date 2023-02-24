@@ -4,7 +4,6 @@ const {fetchUsers} = require ("./user-models")
 const format = require ("pg-format")
 
 
-
 function fetchComments () {
 
     return db.query(`SELECT * FROM comments;`)
@@ -13,7 +12,6 @@ function fetchComments () {
     })
 
 }
-
 
 function touchComment (comment_id, votesObj) {
 
@@ -98,9 +96,6 @@ function addComment (review_id, newComment) {
         })
 }
 
-
-
-
 function fetchCommentsByReview (review_id, limit = null, p = null) {
 
     return fetchReviewById(review_id).then((result) => {
@@ -170,7 +165,6 @@ function eraseComment (comment_id) {
     })
 
 }
-
 
 
 module.exports = {fetchComments, addComment, fetchCommentsByReview, touchComment, eraseComment}
