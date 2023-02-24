@@ -196,6 +196,52 @@ describe("GET /api/reviews", () => {
            
         })
     })
+    test("Accepts limit query which limits number of results", () => {
+        return request(app)
+        .get("/api/reviews?limit=2")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews.length).toBe(2)
+
+            
+        })
+    })
+    test("Accepts page query which changes page of results if also using limit", () => {
+        return request(app)
+        .get("/api/reviews?limit=2&p=2")
+        .expect(200)
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews.length).toBe(2)
+            expect(reviews[0].review_id).toBe(12)
+            expect(reviews[1].review_id).toBe(10)
+
+            
+        })
+    })
+    test("Returns 400 bad request if index query is not a number", () => {
+        return request(app)
+        .get("/api/reviews?limit=GRDPBeDamned&p=2")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg : "Bad request."})
+
+
+            
+        })
+    })
+    test("Returns 400 bad request if p query is not a number", () => {
+        return request(app)
+        .get("/api/reviews?limit=6&p=iAmHackinU")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg : "Bad request."})
+
+
+            
+        })
+    })
 })
 
 describe("GET /api/reviews/:review_id", () => {
