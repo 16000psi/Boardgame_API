@@ -3,6 +3,7 @@ const {fetchUsers} = require ("./user-models")
 const {fetchCategories} = require ("./category-models")
 const format = require ("pg-format")
 
+
 function fetchReviews () {
 
     return db.query(`SELECT * FROM reviews;`)
@@ -219,7 +220,6 @@ function touchReviewVotes (review_id, votesObj) {
     })
 
 }
-
 
 
 module.exports = {eraseReview, addReview, fetchReviews, fetchReviewById, touchReviewVotes, fetchReviewsCommentCount}

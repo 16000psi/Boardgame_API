@@ -1,6 +1,7 @@
 const db = require ("./../db/connection")
 const format = require ("pg-format")
 
+
 function fetchCategories () {
 
     return db.query(`SELECT * FROM categories;`)
@@ -9,7 +10,6 @@ function fetchCategories () {
     })
 
 }
-
 
 function addCategory(category_obj) {
 
@@ -50,8 +50,6 @@ function addCategory(category_obj) {
 
 
 }
-
-
 
 
 module.exports = {addCategory, fetchCategories}
