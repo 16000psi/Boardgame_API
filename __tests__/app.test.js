@@ -362,6 +362,46 @@ describe("GET /api/reviews/:review_id/comments", () => {
 
 
     })
+    test("Accepts limit query which limits the number of results" , () => {
+        return request(app)
+        .get("/api/reviews/3/comments?limit=2")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments.length).toBe(2)
+
+        })
+    })
+    test("Accepts p query which determines the page of results when used in conjunction with limit" , () => {
+        return request(app)
+        .get("/api/reviews/3/comments?limit=1&p=3")
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments[0].comment_id).toBe(2)
+
+        })
+    })
+    test("Returns a 400 bad request if the limit query is not a number" , () => {
+        return request(app)
+        .get("/api/reviews/3/comments?limit=GimmeUrDB&p=3")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({ msg: "Bad request."})
+
+
+        })
+    })
+    test("Returns a 400 bad request if the p query is not a number" , () => {
+        return request(app)
+        .get("/api/reviews/3/comments?limit=1&p=IstealCreditInfo")
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({ msg: "Bad request."})
+
+
+        })
+    })
 })
 
 describe("POST /api/reviews/:review_id/comments", () => {

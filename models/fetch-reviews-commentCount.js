@@ -2,9 +2,6 @@ const db = require("./../db/connection")
 const fetchCategories = require ("./fetch-categories")
 
 fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category = null, limit = null, p = null) => {
-
-    console.log(limit)
-    console.log(p)
     
 
     return fetchCategories()
