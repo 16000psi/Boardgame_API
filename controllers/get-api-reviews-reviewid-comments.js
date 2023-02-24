@@ -1,4 +1,4 @@
-const fetchCommentsByReview = require("./../models/fetch-comments-by-review")
+const {fetchCommentsByReview} = require("./../models/comment-models")
 
 function getCommentsPerReview (req, res, next) {
 

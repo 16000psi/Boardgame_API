@@ -1,5 +1,12 @@
 const db = require("../db/connection")
-const fetchUsers = require("./fetch-users")
+
+function fetchUsers () {
+
+    return db.query(`SELECT * FROM users;`)
+    .then(({rows}) => {
+        return rows
+    })
+}
 
 function fetchUserByUsername (username) {
 
@@ -22,4 +29,6 @@ function fetchUserByUsername (username) {
     })
 }
 
-module.exports = fetchUserByUsername
+module.exports = {fetchUserByUsername, fetchUsers}
+
+

@@ -1,4 +1,4 @@
-const addCategory = require ("./../models/add-category")
+const {addCategory} = require ("./../models/category-models")
 
 function postCategory (req, res, next) {
 

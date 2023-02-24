@@ -1,4 +1,4 @@
-const touchReviewVotes = require("./../models/touch-review-votes")
+const {touchReviewVotes} = require("./../models/review-models")
 
 function patchReviewVotes(req, res, next) {
     const {review_id} = req.params

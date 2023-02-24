@@ -1,4 +1,4 @@
-const addReview = require("./../models/add-review")
+const {addReview} = require("./../models/review-models")
 
 
 function postReview (req, res, next) {

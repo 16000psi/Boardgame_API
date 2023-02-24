@@ -1,4 +1,4 @@
-const fetchReviewsCommentCount = require ("../models/fetch-reviews-commentCount")
+const {fetchReviewsCommentCount} = require ("../models/review-models")
 
 function getReviews  (req, res, next) {
 
