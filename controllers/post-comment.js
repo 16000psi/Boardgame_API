@@ -1,4 +1,4 @@
-const addComment = require ("./../models/add-comment")
+const {addComment} = require ("./../models/comment-models")
 
 function postComment (req, res, next) {
     const {review_id} = req.params

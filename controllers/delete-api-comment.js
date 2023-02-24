@@ -1,4 +1,4 @@
-const eraseComment = require ("./../models/erase-comment")
+const {eraseComment} = require ("./../models/comment-models")
 
 function deleteComment (req, res, next) {
 

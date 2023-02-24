@@ -1,4 +1,4 @@
-const fetchReviewById = require ("../models/fetch-review-byId")
+const {fetchReviewById} = require ("../models/review-models")
 
 function getReviewById  (req, res, next) {
 

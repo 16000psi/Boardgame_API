@@ -1,4 +1,4 @@
-const touchComment = require ("./../models/touch-comment")
+const {touchComment} = require ("./../models/comment-models")
 
 function patchComment (req, res, next) {
 

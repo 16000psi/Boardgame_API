@@ -1,4 +1,4 @@
-const eraseReview = require ("./../models/erase-review")
+const {eraseReview} = require ("./../models/review-models")
 
 function deleteReview  (req, res, next) {
 

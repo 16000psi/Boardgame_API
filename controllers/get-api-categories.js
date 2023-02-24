@@ -1,4 +1,4 @@
-const fetchCategories = require ("./../models/fetch-categories")
+const {fetchCategories} = require ("./../models/category-models")
 
 function getCategories  (req, res, next) {
 
