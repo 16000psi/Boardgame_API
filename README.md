@@ -2,7 +2,7 @@ NC Games is a database and API which is used to access and modify the data store
 
 The project was built in JS-node using TDD and jest / supertest. It uses express to handle the server and postgresql / node-pg to handle the database. 
 
-If you would like to try the api, it is hosted here <URL - hosting not working yet>.  A good place to get started would be sending a GET request to "/api" - this will tell you what endpoints are available.
+If you would like to try the api, it is hosted here https://nc-games-dave1.onrender.com/api.  A good place to get started would be sending a GET request to "/api" - this will tell you what endpoints are available.
 
 If you would like to run the project on your local machine, please follow these steps -
 

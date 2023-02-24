@@ -1,7 +1,11 @@
 const db = require("./../db/connection")
 const fetchCategories = require ("./fetch-categories")
 
-fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category) => {
+fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category = null, limit = null, p = null) => {
+
+    console.log(limit)
+    console.log(p)
+    
 
     return fetchCategories()
     .then((categories) => {
@@ -40,7 +44,24 @@ fetchReviewsCommentCount = (sort_by = "created_at", order = "DESC", category) =>
         }
     
         queryString += `GROUP BY reviews.review_id `
-        queryString += `ORDER BY ${sort_by} ${order};`
+        queryString += `ORDER BY ${sort_by} ${order} `
+
+        if (limit) {
+
+            if (/\D/.test(parseInt(limit)) || (/\D/.test(parseInt(p)) && p !== null)) {
+                return Promise.reject("Bad request.")
+            }
+
+            queryString += `LIMIT ${limit}`
+
+            if (p) {
+
+                queryString += ` OFFSET ${(p - 1) * limit}`
+
+            }
+        }
+
+        queryString += `;`
     
         return db.query(queryString)
         .then(({rows}) => {
