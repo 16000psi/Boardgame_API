@@ -164,7 +164,18 @@ function eraseComment (comment_id) {
 
     })
 
+
+}
+
+function fetchAllCommentsWithReviewID () {
+    return db.query(`SELECT comments.*, reviews.title FROM comments
+    INNER JOIN reviews ON comments.review_id = reviews.review_id
+    ORDER BY created_at DESC;`)
+    .then(({rows}) => {
+        return rows
+    })
+
 }
 
 
-module.exports = {fetchComments, addComment, fetchCommentsByReview, touchComment, eraseComment}
+module.exports = {fetchComments, addComment, fetchCommentsByReview, touchComment, eraseComment, fetchAllCommentsWithReviewID}

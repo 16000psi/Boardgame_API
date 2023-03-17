@@ -12,6 +12,6 @@ const {getUserByUsername, getUsers} = require ("./user-controllers")
 
 const {getCategories, postCategory} = require ("./category-controllers")
 
-const {postComment, getCommentsPerReview, deleteComment, patchComment} = require ("./comment-controllers")
+const {postComment, getCommentsPerReview, deleteComment, patchComment, getAllCommentsWithReviewID} = require ("./comment-controllers")
 
-module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview}
+module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getAllCommentsWithReviewID}

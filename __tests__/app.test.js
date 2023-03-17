@@ -1166,5 +1166,32 @@ describe("DELETE /api/reviews", () => {
 
 })
 
+describe("GET /api/comments", () => {
+    test("responds with a 200 code and an object with a property of comments which is an array", () => {
+        return request(app)
+        .get("/api/comments")
+        .expect(200)
+        .then(({body}) => {
+            expect(Array.isArray (body.comments)).toBeTruthy()
+        })
+    })
+    test("Array should contain correct ammount of objects with slug and description keys", () => {
+        return request(app)
+        .get("/api/comments")
+        .then(({body}) => {
+            for (let i in body.comments) {
+                expect(body.comments[i].hasOwnProperty("review_id")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("title")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("comment_id")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("author")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("votes")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("created_at")).toBeTruthy()
+                expect(body.comments[i].hasOwnProperty("body")).toBeTruthy()
+                expect(Object.keys(body.comments[i]).length).toBe(7)
+            }
+        })
+    })
+})
+
 
 

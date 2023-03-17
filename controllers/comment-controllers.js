@@ -1,4 +1,4 @@
-const {touchComment, eraseComment, addComment, fetchCommentsByReview} = require ("./../models/comment-models")
+const {touchComment, eraseComment, addComment, fetchCommentsByReview, fetchAllCommentsWithReviewID} = require ("./../models/comment-models")
 
 
 function patchComment (req, res, next) {
@@ -72,5 +72,17 @@ function getCommentsPerReview (req, res, next) {
 
 }
 
+function getAllCommentsWithReviewID (req, res, next) {
 
-module.exports = {getCommentsPerReview, postComment, deleteComment, patchComment}
+    fetchAllCommentsWithReviewID().then((comments) => {
+        res.status(200).send({comments})
+
+    })
+    .catch((error) => {
+        next(error)
+    })
+
+}
+
+
+module.exports = {getCommentsPerReview, postComment, deleteComment, patchComment, getAllCommentsWithReviewID}
