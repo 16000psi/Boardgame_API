@@ -703,7 +703,7 @@ describe("GET /api", () => {
         .get("/api")
         .expect(200)
         .then(({body}) => {
-            api = JSON.parse(body.api)
+            const api = body
             expect(typeof api).toBe("object")
         })
 
@@ -713,8 +713,9 @@ describe("GET /api", () => {
         .get("/api")
         .expect(200)
         .then(({body}) => {
-            api = JSON.parse(body.api)
-            const keys = Object.keys(api)
+            const api = body
+            console.log(api)
+            const keys = Object.keys(api.api)
             expect(keys.includes("GET /api")).toBeTruthy()
             expect(keys.includes("GET /api/categories")).toBeTruthy()
             expect(keys.includes("GET /api/reviews")).toBeTruthy()

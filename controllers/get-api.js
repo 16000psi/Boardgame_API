@@ -5,7 +5,7 @@ function getApi (req, res, next) {
     return fs
     .readFile(`${__dirname}/../endpoints.json`, "utf-8")
     .then ((result) => {
-        return result
+        return JSON.parse(result)
     }).then((api) => {
         res.status(200).send({api})
     })
