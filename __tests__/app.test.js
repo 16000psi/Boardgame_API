@@ -1193,5 +1193,100 @@ describe("GET /api/comments", () => {
     })
 })
 
+describe("POST /api/users", () => {
+    test("Responds with 201 and a user object", () => {
+        const newUser = {
+            username: "cardgamez",
+            name: "52 pickup!! hahah lol",
+            avatar_url: "wwww.website.com"
+        }
+        return request(app)
+        .post("/api/users")
+        .send(newUser)
+        .expect(201)
+        .then(({body}) => {
+            const {user} = body
+            expect(typeof user).toBe("object")
+        })
+    })
+    test("Returned comment must have the correct keys", () => {
+        const newUser = {
+            username: "cardgamez",
+            name: "52 pickup!! hahah lol",
+            avatar_url: "wwww.website.com"
+        }
+        return request(app)
+        .post("/api/users")
+        .send(newUser)
+        .expect(201)
+        .then(({body}) => {
+            const {user} = body
+            expect(user).toMatchObject({
+                username: "cardgamez",
+                name: "52 pickup!! hahah lol",
+                avatar_url: "wwww.website.com"
+            })
+            expect(Object.keys(user).length).toBe(3)
+            
+        })
+    })
+    test("Ignores extra category properties and returns successfully", () => {
+        const newUser = {
+            username: "cardgamez",
+            name: "52 pickup!! hahah lol",
+            avatar_url: "wwww.website.com",
+            body: "Let me start by thanking you for such a lovely opportunity to comment.",
+            body2: "Would you believe its been some time since i used this website",
+            body3: "And back in my day things worked a little differently.",
+        }
+        return request(app)
+        .post("/api/users")
+        .send(newUser)
+        .expect(201)
+        .then(({body}) => {
+            const {user} = body
+            expect(user).toMatchObject({
+                username: "cardgamez",
+                name: "52 pickup!! hahah lol",
+                avatar_url: "wwww.website.com"
+            })
+            expect(Object.keys(user).length).toBe(3)
+            
+        })
+    })
+    test("Responds with 400 error if username already exists" , () => {
+        const newUser = {
+            username: "mallionaire",
+            name: "52 pickup!! hahah lol",
+            avatar_url: "wwww.website.com"
+        }
+        
+        return request(app)
+        .post("/api/users")
+        .send(newUser)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Username already exists."})
+
+        })
+
+    })
+
+    test("Responds with 400 error if request object incomplete" , () => {
+        const newUser = {
+            username: "mallionaire"
+        }
+        return request(app)
+        .post("/api/users")
+        .send(newUser)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: "Request incomplete."})
+
+        })
+    })
+})
+
+
 
 

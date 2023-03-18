@@ -8,10 +8,10 @@ exports.getApi = require ("./get-api")
 
 const {getReviews, getReviewById, patchReviewVotes, postReview, deleteReview} = require ("./review-controllers")
 
-const {getUserByUsername, getUsers} = require ("./user-controllers")
+const {getUserByUsername, getUsers, postUser} = require ("./user-controllers")
 
 const {getCategories, postCategory} = require ("./category-controllers")
 
 const {postComment, getCommentsPerReview, deleteComment, patchComment, getAllCommentsWithReviewID} = require ("./comment-controllers")
 
-module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getAllCommentsWithReviewID}
+module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getAllCommentsWithReviewID, postUser}

@@ -6,6 +6,10 @@ function handle400 (error, req, res, next) {
         res.status(400).send({msg : "Username does not exist."})
 
     }
+    if (error === "Username already exists.") {
+        res.status(400).send({msg : "Username already exists."})
+
+    }
 
     if (error === "Item already exists.") {
         res.status(400).send({msg : "Item already exists."})

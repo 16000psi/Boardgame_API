@@ -1,4 +1,5 @@
 const db = require("../db/connection")
+const format = require ("pg-format")
 
 function fetchUsers () {
 
@@ -29,6 +30,48 @@ function fetchUserByUsername (username) {
     })
 }
 
-module.exports = {fetchUserByUsername, fetchUsers}
+function addUser (newUser) {
+
+    return fetchUsers().then((result) => {
+        return result
+    })
+    .then((result) => {
+
+        if (newUser.hasOwnProperty("username") === false || newUser.hasOwnProperty("name") === false || newUser.hasOwnProperty("avatar_url") === false) {
+
+            return Promise.reject("Request incomplete.")
+        }
+        
+        const filtered = result.filter((user) => {
+            if (user.username === newUser.username) {
+                return user
+            }
+        })
+
+        if (filtered.length > 0 ) {
+            return Promise.reject("Username already exists.")
+        }
+    })
+    .then(() => {
+
+        const formatStr = format(`
+        INSERT INTO users
+        (username, name, avatar_url)
+        VALUES
+        %L
+        RETURNING *;`,
+    
+        [[newUser.username, newUser.name, newUser.avatar_url]]
+        )
+    
+        return db.query(formatStr)
+    
+        }).then(({rows}) => {
+            return rows[0]
+    
+        })
+}
+
+module.exports = {fetchUserByUsername, fetchUsers, addUser}
 
 
