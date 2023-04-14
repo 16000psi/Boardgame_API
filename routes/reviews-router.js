@@ -1,6 +1,6 @@
 const reviewsRouter = require("express").Router()
 
-const {getReviews, deleteReview, getReviewById, getCommentsPerReview, postReview, postComment, patchReviewVotes } = require("./../controllers/index");
+const {getReviews, deleteReview, getReviewById, getCommentsPerReview, postReview, postComment, patchReviewVotes, getReviewsByUsername } = require("./../controllers/index");
 
 reviewsRouter.route("/")
 .get(getReviews)
@@ -16,6 +16,9 @@ reviewsRouter.route("/:review_id/comments")
 .get(getCommentsPerReview)
 .post(postComment)
 
+
+reviewsRouter.route("/user/:username")
+.get(getReviewsByUsername)
 
 
 module.exports = reviewsRouter

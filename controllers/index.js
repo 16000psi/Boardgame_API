@@ -6,7 +6,7 @@ exports.handle404 = require ("./error/handle-404")
 
 exports.getApi = require ("./get-api")
 
-const {getReviews, getReviewById, patchReviewVotes, postReview, deleteReview} = require ("./review-controllers")
+const {getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getReviewsByUsername} = require ("./review-controllers")
 
 const {getUserByUsername, getUsers, postUser} = require ("./user-controllers")
 
@@ -14,4 +14,4 @@ const {getCategories, postCategory} = require ("./category-controllers")
 
 const {postComment, getCommentsPerReview, deleteComment, patchComment, getAllCommentsWithReviewID} = require ("./comment-controllers")
 
-module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getAllCommentsWithReviewID, postUser}
+module.exports = {...module.exports, getUserByUsername, getUsers, getCategories, postCategory, postComment, getCommentsPerReview, deleteComment, patchComment, getReviews, getReviewById, patchReviewVotes, postReview, deleteReview, getAllCommentsWithReviewID, postUser, getReviewsByUsername}

@@ -1,4 +1,4 @@
-const {fetchReviewsCommentCount, eraseReview, fetchReviewById, touchReviewVotes, addReview} = require ("../models/review-models")
+const {fetchReviewsCommentCount, eraseReview, fetchReviewById, touchReviewVotes, addReview, fetchReviewsByUsername} = require ("../models/review-models")
 
 
 function getReviews  (req, res, next) {
@@ -78,7 +78,23 @@ function postReview (req, res, next) {
     })
 }
 
+function getReviewsByUsername(req, res, next) {
 
-module.exports = {postReview, patchReviewVotes, deleteReview, getReviewById, getReviews}
+    const {username} = req.params 
+
+    fetchReviewsByUsername(username)
+    .then((result) => {
+        const reviews = result
+        res.status(200).send({reviews})
+    })
+    
+    .catch((error) => {
+        next(error)
+    })
+
+}
+
+
+module.exports = {postReview, patchReviewVotes, deleteReview, getReviewById, getReviews, getReviewsByUsername}
 
 

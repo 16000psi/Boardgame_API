@@ -1288,6 +1288,49 @@ describe("POST /api/users", () => {
     })
 })
 
+describe("GET /api/reviews/user/:username", () => {
+    test("Responds with a 200 code and an object with a property of reviews which contains an array", () => {
+        return request(app)
+        .get("/api/reviews/user/philippaclaire9")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.hasOwnProperty("reviews")).toBeTruthy()
+            expect(Array.isArray(body.reviews)).toBeTruthy()
+ 
+            
+        })
+    })
+    test("Array should contain correct ammount of objects with correct properties", () => {
+        return request(app)
+        .get("/api/reviews/user/philippaclaire9")
+        .then(({body}) => {
+            const {reviews} = body
+            expect(reviews.length).toBe(1)
+            reviews.forEach((review) => {
+                expect(review).toMatchObject({
+                    owner: expect.any(String),
+                    title: expect.any(String),
+                    review_id: expect.any(Number),
+                    category: expect.any(String),
+                    review_img_url: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    designer: expect.any(String),
+                    comment_count: expect.any(Number)
 
+                })
+            })
+
+        })
+    })
+    test("Responds with an empty array if there are no reviews for the username" , () => {
+        return request(app)
+        .get("/api/reviews/user/cancelledThenFiredFromCompany")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.reviews).toEqual([])
+        })
+    })
+})
 
 
